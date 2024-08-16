@@ -5,16 +5,18 @@ const contactList = {
     '+5511966118189' : 'Adonay'
 }
 
+const app = express();
+app.use(express.urlencoded({ extended: true }));
+
 function initialMessage(userPhoneNumber){
     const MessagingResponse = twilio.twiml.MessagingResponse;
     const resp = new MessagingResponse();
     const contactName =  contactList[userPhoneNumber] || userPhoneNumber;
 
-    resp.message("Olá ${contactName}! Parece que você está offline. Se precisar de algo, estou aqui! ")
+    resp.message(`Olá ${contactName}! Parece que você está offline. Se precisar de algo, estou aqui para ajudar!`);
 }
 
-const app = express();
-app.use(express.urlencoded({ extended: true }));
+
 
 app.post('/sms', (req, res) => {
     // Obter a mensagem do usuário
