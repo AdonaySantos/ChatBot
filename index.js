@@ -14,13 +14,16 @@ function initialMessage(userPhoneNumber){
     const contactName =  contactList[userPhoneNumber] || userPhoneNumber;
 
     resp.message(`Olá ${contactName}! Parece que você está offline. Se precisar de algo, estou aqui para ajudar!`);
-}
-
-
+};
 
 app.post('/sms', (req, res) => {
     // Obter a mensagem do usuário
     const msg = req.body.Body;
+    const userPhoneNumber = req.body.From;
+
+    if (global.timer) {
+        clearTimeout(global.timer);
+    }
 
     // Criar uma resposta usando Twilio
     const MessagingResponse = twilio.twiml.MessagingResponse;
