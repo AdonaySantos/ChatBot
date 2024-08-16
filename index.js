@@ -21,8 +21,8 @@ app.post('/sms', (req, res) => {
     const msg = req.body.Body;
     const userPhoneNumber = req.body.From;
 
-    if (global.timer) {
-        clearTimeout(global.timer);
+    if (userTimers[userPhoneNumber]) {
+        clearTimeout(userTimers[userPhoneNumber]);
     }
 
     // Criar uma resposta usando Twilio
@@ -38,7 +38,7 @@ app.post('/sms', (req, res) => {
         resp.message('Desculpe, não entendi sua mensagem. Você pode reformular?');
     }
 
-    global.timer = setTimeout(() => initialMessage(userPhoneNumber), 10000);
+    userTimers[userPhoneNumber] = setTimeout(() =>initialMessage(userPhoneNumber), 10000);
 
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(resp.toString());
