@@ -23,7 +23,7 @@ app.post('/sms', (req, res) => {
     const resp = new MessagingResponse();
 
     // Lógica básica para responder a mensagens
-    if (msg.toLowerCase().msg.match(/oi.*/, /bom dia.*/, /boa noite.*/, /boa tarde.*/, /menu.*/)) {
+    if (msg.toLowerCase().msg.match("oi",/oi.*/, /bom dia.*/, /boa noite.*/, /boa tarde.*/, /menu.*/)) {
         resp.message(`Olá ${contactName}! Como posso te ajudar hoje?\n 1 - Agendar Horário \n 2 - Verificar Preços \n 3 - Nossa Unidade \n 4 - Nossas Redes Sociais`);
     } else if (msg.toLowerCase().includes('1')) {
         resp.message('');
