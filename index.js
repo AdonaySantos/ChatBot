@@ -2,11 +2,15 @@ const express = require('express');
 const twilio = require('twilio');
 
 const contactList = {
-    '+5511966118189' : 'Adonay'
+    'whatsapp:+5511966118189' : 'Adonay'
 }
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
+
+app.get('/', (req, res) => {
+    res.send('ChatBot!')
+});
 
 app.post('/sms', (req, res) => {
     // Obter a mensagem do usuário
@@ -19,10 +23,16 @@ app.post('/sms', (req, res) => {
     const resp = new MessagingResponse();
 
     // Lógica básica para responder a mensagens
-    if (msg.toLowerCase().includes('oi')) {
-        resp.message(`Olá ${contactName}! Como posso ajudá-lo hoje?`);
-    } else if (msg.toLowerCase().includes('preço')) {
-        resp.message('Nosso preço depende dos serviços que você precisa. Por favor, descreva o que você precisa.');
+    if (msg.toLowerCase().msg.match(/oi.*/, /bom dia.*/, /boa noite.*/, /boa tarde.*/, /menu.*/)) {
+        resp.message(`Olá ${contactName}! Como posso te ajudar hoje?\n 1 - Agendar Horário \n 2 - Verificar Preços \n 3 - Nossa Unidade \n 4 - Nossas Redes Sociais`);
+    } else if (msg.toLowerCase().includes('1')) {
+        resp.message('');
+    } else if (msg.toLowerCase().includes('2')) {
+        resp.message('');
+    } else if (msg.toLowerCase().includes('3')) {
+        resp.message('');
+    } else if (msg.toLowerCase().includes('4')) {
+        resp.message('');
     } else {
         resp.message('Desculpe, não entendi sua mensagem. Você pode reformular?');
     }
@@ -32,5 +42,5 @@ app.post('/sms', (req, res) => {
 });
 
 app.listen(3000, () => {
-    console.log('Servidor rodando na porta 3000');
+    console.log('Servidor rodando na porta http://localhost:3000');
 });
