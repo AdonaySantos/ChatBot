@@ -1,7 +1,6 @@
+const { myPhone } = require("../config/config");
 const service = require("./chatbot.service");
 const twilio = require("twilio");
-const { myPhone } = require("../config/config");
-require("dotenv").config();
 
 const contactList = {
   [myPhone]: "Adonay",

@@ -1,4 +1,3 @@
-require("dotenv").config();
 const { myPhone } = require("../config/config");
 
 function generateResponse(userPhoneNumber, msg, contactName) {
@@ -26,11 +25,7 @@ function clientResponse(msg, contactName) {
     return "Aqui estão os nossos preços atualizados:\n- Serviço 1: R$XX,XX\n- Serviço 2: R$XX,XX\n- Serviço 3: R$XX,XX\nPara mais informações, visite nosso site ou entre em contato conosco.";
   } else if (msg === "3" || msg.includes("unidade") || msg.includes("local")) {
     return "Nossa unidade está localizada na Rua Exemplo, 123, Bairro Exemplo, Cidade. Estamos abertos de segunda a sexta, das 08:00 às 18:00. Venha nos visitar!";
-  } else if (
-    msg === "4" ||
-    msg.includes("redes sociais") ||
-    msg.includes("social")
-  ) {
+  } else if (msg === "4" || msg.includes("redes sociais") || msg.includes("social")) {
     return "Siga-nos nas redes sociais para ficar por dentro de todas as novidades:\n- Instagram: [@seuinstagram]\n- Facebook: [facebook.com/seupagina]\n- Twitter: [@seutwitter]";
   } else {
     return 'Desculpe, não entendi sua mensagem. Por favor, escolha uma das opções do menu ou digite "menu" para ver as opções novamente.';
