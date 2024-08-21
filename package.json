@@ -2,7 +2,7 @@
   "name": "chatbot",
   "version": "1.0.0",
   "description": "Criando um ChatBot de atendimento ao cliente utilizando JavaScript",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js"
