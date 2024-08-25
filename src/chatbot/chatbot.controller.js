@@ -14,11 +14,13 @@ function createResponse(req, res) {
   const MessagingResponse = twilio.twiml.MessagingResponse;
   const resp = new MessagingResponse();
 
-  const responseMessage = service.setTypeOfResponse(
+  const user = {
     userPhoneNumber,
     msgLower,
     contactName
-  );
+  }
+
+  const responseMessage = service.setTypeOfResponse(user);
   resp.message(responseMessage);
 
   res.writeHead(200, { "Content-Type": "text/xml" });
