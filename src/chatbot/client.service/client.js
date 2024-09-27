@@ -9,7 +9,7 @@ let bookingDays = Array.from({ length: 30 }, (_, i) => {
   const today = new Date();
   const date = new Date(today.setDate(today.getDate() + i));
 
-  const day = date.getDate() + 1;
+  const day = date.getDate();
   const month = date.getMonth() + 1; // Months are zero-indexed in JS
   const year = date.getFullYear();
 
@@ -27,23 +27,25 @@ function response(user) {
       return listAvailableDays();
     },
     2() {
-      return "Aqui estão os nossos preços atualizados:\n- Serviço 1: R$XX,XX\n- Serviço 2: R$XX,XX\n- Serviço 3: R$XX,XX\nPara mais informações, visite nosso site ou entre em contato conosco.";
+      return "Aqui estão os nossos preços atualizados:\n- Corte de cabelo: R$35,00\n- Sobrancelha: R$10,00\n- Freestyle: R$10,00\nPara mais informações, visite nosso site ou entre em contato conosco.";
     },
     3() {
       return "Nossa unidade está localizada na Rua Exemplo, 123, Bairro Exemplo, Cidade. Estamos abertos de segunda a sexta, das 08:00 às 18:00. Venha nos visitar!";
     },
     4() {
-      return "Siga-nos nas redes sociais para ficar por dentro de todas as novidades:\n- Instagram: [@seuinstagram]\n- Facebook: [facebook.com/seupagina]\n- Twitter: [@seutwitter]";
+      return "Siga-nos nas redes sociais para ficar por dentro de todas as novidades:\n- Instagram: [@seuinstagram]\n- Facebook: [facebook.com/suapágina]";
     },
   };
 
   const msgResponseOptions = menuOptions[user.msgLower];
   if (msgResponseOptions) {
     return msgResponseOptions();
-  } else if (/^(oi|bom dia|olá|ola|bom|boa noite|boa tarde|menu)/.test(user.msgLower)) {
+  } else if (
+    /^(oi|bom dia|olá|ola|bom|boa noite|boa tarde|menu)/.test(user.msgLower)
+  ) {
     return `Olá ${user.contactName}! Como posso te ajudar hoje?\n 1 - Agendar Horário \n 2 - Verificar Preços \n 3 - Nossa Unidade \n 4 - Nossas Redes Sociais.\nPor favor, responda com o número da opção desejada.`;
   } else {
-    return "Desculpe, não entendi sua mensagem. Por favor, escolha uma das opções do menu ou digite 'menu' para ver as opções novamente.";
+    return "Desculpe, não entendi sua mensagem. Por favor, escolha uma das opções do menu (por exemplo '1') ou digite 'menu' para ver as opções novamente.";
   }
 }
 
@@ -51,16 +53,16 @@ function listAvailableDays() {
   let availableDays = "Dias disponíveis para agendamento:\n";
   bookingDays.forEach((day, index) => {
     if (day.status === "available") {
-      availableDays += `${index + 1} - ${day.date}\n`;
+      availableDays += `- ${index + 1} - ${day.date}\n`;
     }
   });
 
-  return (availableDays + "Por favor, responda com o número do dia desejado.");
+  return availableDays + "Por favor, responda com o número do dia desejado.";
 }
 
 function handleBookingProcess(user) {
   const context = userContext[user];
-  
+
   if (context.inBookingProcess === "selectingDay") {
     const dayIndex = parseInt(user.msgLower) - 1;
     if (bookingDays[dayIndex]?.status === "available") {
@@ -73,7 +75,7 @@ function handleBookingProcess(user) {
   } else if (context.inBookingProcess === "selectingHour") {
     const hourIndex = parseInt(user.msgLower) - 1;
     const selectedDay = bookingDays[context.selectedDay];
-    
+
     if (selectedDay.hours[hourIndex]?.status === "disponível") {
       context.inBookingProcess = false; // Sai do estado de agendamento
       return bookSelectedTime(context.selectedDay, hourIndex, user.contactName);
@@ -93,10 +95,15 @@ function listAvailableTimes(dayIndex) {
     }
   });
 
-  if (availableTimes === `Horários disponíveis para o dia ${bookingDays[dayIndex].date}:\n`) {
+  if (
+    availableTimes ===
+    `Horários disponíveis para o dia ${bookingDays[dayIndex].date}:\n`
+  ) {
     return "Desculpe, todos os horários estão reservados para este dia.";
   } else {
-    return (availableTimes + "Por favor, responda com o número do horário desejado.");
+    return (
+      availableTimes + "Por favor, responda com o número do horário desejado."
+    );
   }
 }
 
@@ -108,10 +115,12 @@ function bookSelectedTime(dayIndex, hourIndex, name) {
     selectedHour.status = "reservado";
     selectedHour.ocupante = name;
 
-    const allBooked = selectedDay.hours.every(hour => hour.status === "reservado")
+    const allBooked = selectedDay.hours.every(
+      (hour) => hour.status === "reservado"
+    );
 
-    if (allBooked){
-      selectedDay.status = "fullBooked"
+    if (allBooked) {
+      selectedDay.status = "fullBooked";
     }
 
     return `Horário das ${selectedHour.horario} do dia ${selectedDay.date} reservado com sucesso!`;
@@ -127,4 +136,5 @@ module.exports = {
   listAvailableTimes,
   bookSelectedTime,
   userContext,
+  bookingDays,
 };
